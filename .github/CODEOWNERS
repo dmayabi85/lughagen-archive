@@ -1,0 +1,22 @@
+# Default owners
+* @team-leads
+
+# Data team
+/data/ @data-team
+/src/lughagen/data/ @data-team
+
+# Training team
+/src/lughagen/train/ @training-team
+/configs/train.yaml @training-team
+
+# Evaluation / Trust team
+/src/lughagen/evaluate/ @eval-team
+/docs/evaluation/ @eval-team
+
+# Deployment team
+/src/lughagen/deploy/ @deployment-team
+/scripts/serve.py @deployment-team
+
+# Docs (shared with faculty)
+/README.md @team-leads @faculty
+/docs/ @faculty @team-leads
