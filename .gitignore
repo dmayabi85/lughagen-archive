@@ -1,21 +1,118 @@
-# Python
+# ============================================================
+# Python (team's original)
+# ============================================================
 __pycache__/
 *.pyc
+*.py[cod]
+*$py.class
+*.egg-info/
 
-# Env
+# ============================================================
+# Environment / credentials (team's original)
+# ============================================================
 .env
+.venv/
+venv/
+env/
 
-# Data
+# ============================================================
+# Data (team's original + thesis additions)
+# ============================================================
 data/raw/*
 data/interim/*
 data/processed/*
+data/corpus/
+data/staged/
+*.jsonl
+*.parquet
+!data/README.md
 
-# Models
+# ============================================================
+# Notebooks (team's original)
+# ============================================================
+.ipynb_checkpoints/
+*.ipynb.backup
+
+# ============================================================
+# OS (team's original)
+# ============================================================
+.DS_Store
+Thumbs.db
+
+# ============================================================
+# Models — checkpoints & weights (team's + thesis additions)
+# ============================================================
 models/*.bin
 models/*.pt
+*.safetensors
+*.pth
+model.safetensors.index.json
+adapter_model.safetensors
 
-# Notebooks
-.ipynb_checkpoints/
+# ============================================================
+# Training outputs (thesis additions)
+# ============================================================
+checkpoints/
+logs/
+releases/
+audit_files/
+audited_v2/
+diag/
+snapshots/
+mfu_log.jsonl
+checkpoint_manifest.json
+per_language_grad_norms.jsonl
+kill_switch.txt
 
-# OS
-.DS_Store
+# ============================================================
+# HuggingFace cache (thesis additions)
+# ============================================================
+.cache/
+huggingface/
+
+# ============================================================
+# Registry — commit configs, ignore per-run state (thesis additions)
+# ============================================================
+registry/runs.csv
+registry/runs.sqlite
+registry/runs*.bak-*
+registry/*.bak-*
+registry/nohup.out
+registry/smoke_logs/
+registry/environment_lock_history/
+
+# ============================================================
+# Backup files (thesis additions)
+# ============================================================
+*.bak
+*.bak-*
+restart_backup_*/
+
+# ============================================================
+# One-off patch scripts (thesis additions)
+# ============================================================
+patch_preflight.py
+patch_preflight_followup.py
+patch_preflight_smoke_arg.py
+patch_runconfig_started_at.py
+patch_tokenizer_strategy_b.py
+patch_training_loop_dataset_features.py
+fix_afrolid.sh
+fix_afrolid_labels.sh
+find_domain_field.sh
+
+# ============================================================
+# Personal / session state (thesis additions)
+# ============================================================
+RESUME_TOMORROW.md
+nohup.out
+*.swp
+*.swo
+
+# ============================================================
+# Editor (thesis additions)
+# ============================================================
+.idea/
+.vscode/
+.pytest_cache/
+.mypy_cache/
