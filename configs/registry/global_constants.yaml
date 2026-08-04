@@ -1,0 +1,101 @@
+baseline_perplexity:
+  by_sequence_length:
+    1024: 13963.030988788338
+    2048: 14027.456378574321
+  computed_at: '2026-05-20T04:48:40Z'
+  methodology: QLoRA-wrapped LLaMA-3.1-8B (4-bit NF4, LoRA r=16, seq_len=1024), trainer.evaluate()
+    pathway. Measurement from BASELINE-V2-QLORA-WRAPPED run.
+  methodology_notes: V1 baseline (pooled=8015.42) used raw bf16 LLaMA-3.1-8B with
+    seq_len=2048 and manual cross-entropy on batch_size=1. This was not comparable
+    to training eval which uses QLoRA-wrapped model with seq_len=1024 via trainer.evaluate().
+    V1 baseline produced systematically negative PPH (-42 for cell 1) because training
+    eval starts ~5948 points higher than V1 baseline due to PEFT wrapping. V2 baseline
+    measures from the same starting state as training eval, making PPH a true measure
+    of learning during Phase 2 training.
+  per_language: null
+  per_language_note: V2 per-language baselines not captured (trainer.evaluate() returns
+    pooled only). Post-hoc per-language perplexity analysis after Phase 2 will provide
+    per-language reference values.
+  pooled: 13963.030988788338
+  tokenizer_version: /workspace/data/processed/tokenizers/strategy_c
+  v1_computed_at: '2026-05-18T09:09:43Z'
+  v1_methodology: Raw bf16 LLaMA, seq_len=2048, batch_size=1, manual CE. Deprecated
+    2026-05-XX.
+  v1_per_language:
+    kamba: 8009.60736863613
+    kikuyu: 8024.280984782163
+    luo: 8022.908877485885
+    swahili: 8014.130465140822
+  v1_pooled: 8015.422750478932
+  v1_status: 'DEPRECATED: not comparable to training eval pathway'
+  version: 2
+phase2_throughput_calibration:
+  computed_at: '2026-05-18T14:12:06Z'
+  deviation_from_budget_pct: -97.28249632992585
+  extrapolated_phase2_gpu_hours: 489.15066061334954
+  final_loss: 9.462507629394532
+  micro_benchmark_tokens_per_sec: 19607.405077692165
+  micro_benchmark_tokens_per_sec_per_gpu: 2450.9256347115206
+  peak_vram_gb: 9.4287109375
+  sanity_passed: true
+tokenizer_version:
+  mean_fertility: 1.854716919544304
+  selected_at: '2026-05-18T08:05:32Z'
+  selection_rationale: Strategy C (ByteLevelBPE-from-scratch). Selected over A (LLaMA
+    extension, mean fertility 2.35) on fertility evidence + qualitative validation.
+    Strategy B abandoned due to transformers 5.x SP-conversion incompatibilities (eight
+    fix iterations documented in phase0_winner.yaml).
+  value: /workspace/data/processed/tokenizers/strategy_c
+  winner_strategy: C
+tost_delta_pph:
+  canonical_choice: option2_v3_common
+  canonical_reason: V3 common baseline is methodologically cleaner (commensurable
+    across all methods via direct-eval pathway); sensitivity analyses under Option
+    1 (V2 per-method) also documented in tost_delta_pph_v2.* keys.
+  computed_at: '2026-07-28T09:06:28Z'
+  derivation: 5_percent_of_phase2_mean_pph_v3_common_baseline_convention
+  retroactive: true
+  retroactive_note: "Written 2026-07-28 after Phase 3 completion. Framework spec \xA7\
+    10.3.4 required pre-Phase-3 computation; workflow gap in preflight validation\
+    \ (--skip-preflight in launchers) caused deferred execution. Compliance gap documented\
+    \ in thesis Chapter 4 methodology and Chapter 6 limitations."
+  value: 2.53663
+tost_delta_pph_v2:
+  option1_v2_per_method:
+    baseline_description: "V2 baseline (QLoRA-wrapped model via trainer.evaluate());\
+      \ framework spec \xA74.2 original convention"
+    baseline_used: 13963.03
+    compliance_note: "Framework spec \xA710.3.4 required pre-Phase-3 computation.\
+      \ This value was computed retroactively after Phase 3 completion due to preflight\
+      \ validation workflow gap. Documented in thesis Chapter 4 (methods) and Chapter\
+      \ 6 (limitations)."
+    computed_at: '2026-07-28T08:41:13Z'
+    derivation: 5_percent_of_|phase2_mean_pph|_filtered
+    phase2_cells_included: 32
+    phase2_mean_pph: 84.80687641963563
+    retroactive: true
+    script: compute_tost_delta_v2.py
+    sensitivity:
+      pct_10: 8.480687641963563
+      pct_3: 2.544206292589069
+      pct_7: 5.936481349374494
+    value: 4.240343820981781
+  option2_v3_common:
+    baseline_description: V3 baseline (direct forward pass on untuned model with tokenizer
+      resize + remap); commensurable across eval pathways
+    baseline_used: 8364.21
+    compliance_note: "Framework spec \xA710.3.4 required pre-Phase-3 computation.\
+      \ This value was computed retroactively after Phase 3 completion due to preflight\
+      \ validation workflow gap. Documented in thesis Chapter 4 (methods) and Chapter\
+      \ 6 (limitations)."
+    computed_at: '2026-07-28T08:41:13Z'
+    derivation: 5_percent_of_|phase2_mean_pph|_filtered
+    phase2_cells_included: 32
+    phase2_mean_pph: 50.732593137285
+    retroactive: true
+    script: compute_tost_delta_v2.py
+    sensitivity:
+      pct_10: 5.0732593137285
+      pct_3: 1.52197779411855
+      pct_7: 3.5512815196099505
+    value: 2.53662965686425

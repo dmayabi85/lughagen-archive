@@ -1,0 +1,108 @@
+#!/bin/bash
+# Live view of RUN-P3-CPT training.
+# Same layout as fft_live.sh but with FFT (19.55) and QLoRA (23.69) as reference points.
+
+LOG_FILE=$(ls -t /workspace/logs/phase3_RUN-P3-CPT_*.log 2>/dev/null | head -1)
+if [ -z "$LOG_FILE" ]; then
+    echo "ERROR: no CPT log found"
+    exit 1
+fi
+
+CELL_ID="RUN-P3-CPT"
+QLORA_PPH="23.69"
+FFT_PPH="19.55"
+FFT_BEST="19.20"
+
+while true; do
+    clear
+    NOW=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+    echo "+============================================================================+"
+    echo "| LughaGen Phase 3: $CELL_ID  ·  $NOW"
+    echo "+============================================================================+"
+
+    PROC=$(ps aux | grep train_orchestrator | grep -v grep | wc -l)
+    if [ "$PROC" -eq "0" ]; then
+        echo "| STATUS: STOPPED"
+    else
+        echo "| STATUS: RUNNING ($PROC processes)"
+    fi
+
+    PROGRESS=$(grep -oE "[0-9]+/6000 \[[0-9:<,\.]+ +[0-9\.]+s/it\]" "$LOG_FILE" | tail -1)
+    if [ -n "$PROGRESS" ]; then
+        STEP=$(echo "$PROGRESS" | grep -oE "^[0-9]+")
+        PCT=$(python3 -c "print(f'{100*$STEP/6000:.1f}')")
+        RATE=$(echo "$PROGRESS" | grep -oE "[0-9\.]+s/it" | grep -oE "[0-9\.]+")
+        ELAPSED=$(echo "$PROGRESS" | grep -oE "\[[0-9:]+<" | tr -d "[<")
+        ETA=$(echo "$PROGRESS" | grep -oE "<[0-9:]+," | tr -d "<,")
+        if [ -n "$RATE" ]; then
+            REM=$((6000 - STEP))
+            REM_SEC=$(python3 -c "print(int($REM * $RATE))")
+            FINISH=$(date -u -d "+${REM_SEC} seconds" +"%m-%d %H:%M UTC")
+        fi
+        echo "| Step:    $STEP / 6000  ($PCT%)  ·  ${RATE}s/step"
+        echo "| Elapsed: $ELAPSED  ·  ETA: $ETA  ·  Finish: ~$FINISH"
+    else
+        echo "| Progress: (setup phase — no training steps yet)"
+        LAST_SETUP=$(grep -E "\[FFT\]|\[remap\]|\[FA2\]|\[data\]|\[batch\]|Loading weights|Generating|Map \(" "$LOG_FILE" | tail -3)
+        if [ -n "$LAST_SETUP" ]; then
+            echo "|"
+            echo "| Setup markers:"
+            echo "$LAST_SETUP" | while read line; do
+                echo "|   ${line:0:70}"
+            done
+        fi
+    fi
+
+    echo "+============================================================================+"
+    echo "| PERPLEXITY TRACKING (CPT vs FFT vs QLoRA)                                  |"
+    echo "|                                                                            |"
+    echo "|   QLoRA-clean:  $QLORA_PPH                                                  |"
+    echo "|   FFT (final):  $FFT_PPH  (best 19.20 at step 5400)                        |"
+    echo "|                                                                            |"
+    echo "|   Decision: does CPT beat FFT?  (would surprise, but interesting)          |"
+    echo "+----------------------------------------------------------------------------+"
+
+    EVAL_LINES=$(grep "'eval_loss':" "$LOG_FILE" 2>/dev/null)
+    if [ -n "$EVAL_LINES" ]; then
+        echo "| Eval trajectory:                                                           |"
+        echo "|                                                                            |"
+        echo "$EVAL_LINES" | while read line; do
+            EL=$(echo "$line" | grep -oE "'eval_loss': '[0-9\.]+'" | grep -oE "[0-9\.]+")
+            EP=$(echo "$line" | grep -oE "'epoch': '[0-9\.]+'" | grep -oE "[0-9\.]+")
+            [ -z "$EL" ] && continue
+            PPH=$(python3 -c "import math; print(f'{math.exp($EL):.2f}')" 2>/dev/null)
+            DFFT=$(python3 -c "print(f'{$PPH - $FFT_PPH:+.2f}')" 2>/dev/null)
+            DQ=$(python3 -c "print(f'{$PPH - $QLORA_PPH:+.2f}')" 2>/dev/null)
+            printf "|   epoch=%-9s pph=%-8s (vs FFT: %s  vs QLoRA: %s)\n" "$EP" "$PPH" "$DFFT" "$DQ"
+        done
+        echo "|                                                                            |"
+
+        LATEST_LOSS=$(echo "$EVAL_LINES" | tail -1 | grep -oE "'eval_loss': '[0-9\.]+'" | grep -oE "[0-9\.]+")
+        LATEST_PPH=$(python3 -c "import math; print(f'{math.exp($LATEST_LOSS):.2f}')" 2>/dev/null)
+        LATEST_DFFT=$(python3 -c "print(f'{$LATEST_PPH - $FFT_PPH:+.2f}')" 2>/dev/null)
+        echo "|   LATEST PPH: $LATEST_PPH   (vs FFT: $LATEST_DFFT)"
+    else
+        echo "|   No evals yet.  First eval fires at step 200 (~30-40 min in).             |"
+    fi
+
+    echo "+============================================================================+"
+    echo "| Training loss (last 5 log points)                                          |"
+    grep "'loss':" "$LOG_FILE" 2>/dev/null | tail -5 | while read line; do
+        L=$(echo "$line" | grep -oE "'loss': '[0-9\.]+'" | grep -oE "[0-9\.]+")
+        G=$(echo "$line" | grep -oE "'grad_norm': '[0-9\.]+'" | grep -oE "[0-9\.]+")
+        LR=$(echo "$line" | grep -oE "'learning_rate': '[0-9\.e\-]+'" | grep -oE "[0-9\.e\-]+" | head -1)
+        printf "|   loss=%-8s grad_norm=%-8s lr=%s\n" "$L" "$G" "$LR"
+    done
+
+    echo "+============================================================================+"
+    echo "| GPUs                                                                       |"
+    nvidia-smi --query-gpu=index,memory.used,utilization.gpu,temperature.gpu \
+        --format=csv,noheader | \
+        awk -F',' '{printf "|   GPU %s: mem=%s  util=%s  temp=%s\n", $1, $2, $3, $4}'
+
+    echo "+============================================================================+"
+    echo "  Log: $(basename $LOG_FILE)  ·  Refresh 15s  ·  Ctrl-C to exit"
+
+    sleep 15
+done

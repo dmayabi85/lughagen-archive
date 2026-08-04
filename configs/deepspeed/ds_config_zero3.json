@@ -1,0 +1,29 @@
+{
+  "_comment_purpose": "DeepSpeed ZeRO-3 config for Phase 3 FFT/CPT of Llama-3.1-8B on 8xA100 80GB",
+  "_comment_memory": "8B params in bf16 = 16GB weights, sharded across 8 GPUs = 2GB weights/GPU. Optimizer states (AdamW: 8 bytes/param * 8B = 64GB) sharded = 8GB/GPU. Gradients sharded = 2GB/GPU. Plus activations ~30GB/GPU with grad checkpointing. Total: ~42GB/GPU peak, fits in 80GB.",
+
+  "train_batch_size": "auto",
+  "train_micro_batch_size_per_gpu": "auto",
+  "gradient_accumulation_steps": "auto",
+
+  "bf16": {
+    "enabled": true
+  },
+
+  "zero_optimization": {
+    "stage": 3,
+    "overlap_comm": true,
+    "contiguous_gradients": true,
+    "sub_group_size": 1000000000,
+    "reduce_bucket_size": "auto",
+    "stage3_prefetch_bucket_size": "auto",
+    "stage3_param_persistence_threshold": "auto",
+    "stage3_max_live_parameters": 1000000000,
+    "stage3_max_reuse_distance": 1000000000,
+    "stage3_gather_16bit_weights_on_model_save": true
+  },
+
+  "gradient_clipping": "auto",
+  "steps_per_print": 50,
+  "wall_clock_breakdown": false
+}

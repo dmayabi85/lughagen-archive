@@ -1,0 +1,7 @@
+spec_versions:
+- version: 1.5.1
+  sha256: ce4f093055a0bef9b0521e5f02308f584375826878f7d4510c68aaf858140651
+  file: LughaGen_Training_Framework_Spec_v1.5.1.md
+  valid_from: '2026-05-17T16:51:54Z'
+  valid_until: null
+  superseded_by: null

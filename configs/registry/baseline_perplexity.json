@@ -1,0 +1,27 @@
+{
+  "pooled_perplexity": 8364.21,
+  "version": 3,
+  "computed_at": "2026-07-28T05:46:56Z",
+  "tokenizer_version": "/workspace/data/processed/tokenizers/strategy_c",
+  "methodology": "V3 - untuned LLaMA-3.1-8B in 4-bit NF4, strategy_c tokenizer resize (128256->8000) with token-aware embedding remap applied. Direct HuggingFace causal LM forward pass on filtered validation set (pathD_v2_filtered/validation_shared_v3.jsonl), single-GPU sequential eval, no LoRA wrapping.",
+  "source": "Direct eval 2026-07-28 during Phase 3 audit. Discovered V2 baseline was ~67% inflated relative to direct measurement, likely due to QLoRA-wrapped evaluation methodology introducing adapter noise.",
+  "n_records_evaluated": 5976,
+  "n_tokens_evaluated": 300386,
+  "mean_ce_loss": 9.0317,
+  "by_sequence_length": {
+    "1024": 8364.21
+  },
+  "history": {
+    "v1": {
+      "pooled_perplexity": 8015.422750478932,
+      "note": "Original baseline, deprecated when V2 was introduced. Close to V3 within ~4%."
+    },
+    "v2": {
+      "pooled_perplexity": 13963.030988788338,
+      "computed_at": "2026-05-20T04:48:40Z",
+      "methodology": "V2 - QLoRA-wrapped LLaMA-3.1-8B, seq_len=1024, trainer.evaluate() pathway",
+      "by_sequence_length_2048": 14027.456378574321,
+      "note": "May 2026 attempt to 'correct' V1. Discovered in July 2026 to be ~67% inflated. Likely cause: LoRA adapter contribution to loss even when untrained. Deprecated in V3."
+    }
+  }
+}

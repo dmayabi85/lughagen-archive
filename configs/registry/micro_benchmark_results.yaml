@@ -1,0 +1,16 @@
+total_steps: 200
+warmup_steps: 50
+effective_batch_size: 128
+seq_length: 1024
+n_gpus: 8
+tokens_per_step: 131072
+wall_clock_seconds: 1426.9642691691406
+tokens_per_second_total: 19607.405077692165
+tokens_per_second_per_gpu: 2450.9256347115206
+peak_vram_gb: 9.4287109375
+extrapolated_seconds_per_run: 6878.681164875228
+extrapolated_gpu_hours_per_run: 15.285958144167173
+extrapolated_phase2_gpu_hours: 489.15066061334954
+deviation_from_budget_pct: -97.28249632992585
+final_loss: 9.462507629394532
+sanity_passed: true

@@ -1,0 +1,18 @@
+{
+  "version": "gemma2-v1.1",
+  "source_model": "/workspace/models/gemma-2-27b",
+  "source_ref": "model-00001-of-00024.safetensors::model.embed_tokens.weight",
+  "source_vocab_size": 256000,
+  "target_vocab_size": 8000,
+  "hidden_size": 4608,
+  "source_nonzero_rows": 256000,
+  "tie_word_embeddings": true,
+  "stats": {
+    "exact_match_kept": 3799,
+    "exact_match_fallback_mean": 0,
+    "decompose_kept": 4201,
+    "decompose_fallback_mean": 0,
+    "mean_fallback_original": 0
+  },
+  "notes": "Gemma 2 27B -> strategy_c 8K vocab. lm_head.pt = embed_tokens.pt (tied). v1.1 fixes: no strip(), SPM/BPE whitespace-marker normalization, no_grad wrap."
+}

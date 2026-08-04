@@ -1,0 +1,26 @@
+# Captured by verify_environment.sh on 2026-05-18T04:26:19Z
+# Host: brev-beuixezzc
+# Spec version: 1.5.1
+verified_versions:
+  python: "3.12.13"
+  torch: "2.12.0+cu130"
+  cuda_torch: "13.0"
+  cuda_driver: "580.105.08"
+  transformers: "5.8.1"
+  peft: "0.19.1"
+  datasets: "4.8.5"
+  deepspeed: "0.19.0"
+  bitsandbytes: "0.49.2"
+  flash_attn: "2.8.3"
+  lion_pytorch: "0.2.4"
+  accelerate: "1.13.0"
+  sentencepiece: "0.2.1"
+  tokenizers: "0.22.2"
+gpu_inventory:
+  gpu_count: 8
+  gpu_type: "NVIDIA A100-SXM4-80GB"
+  total_vram_per_gpu_gb: 80
+disk:
+  workspace_free_gb: 18578
+captured_at: "2026-05-18T04:26:19Z"
+hostname: "brev-beuixezzc"

@@ -1,0 +1,272 @@
+# ==============================================================================
+# LughaGen Phase 3 Pre-Registration
+# ==============================================================================
+# Purpose:  Compare QLoRA, Full Fine-Tuning (FFT), and Continued Pre-Training
+#           (CPT) as adaptation methods for East African languages, on a
+#           filtered clean corpus, using the winning Phase 2 hyperparameter
+#           configuration (C05).  Select production method by measured
+#           quality-per-compute (Intervention Efficiency Score).
+#
+# Registered: 2026-07-18 (BEFORE any Phase 3 runs)
+# Author: Derek Mayabi
+# Status: PLANNED
+#
+# This document is immutable once Phase 3 runs begin.  Deviations from
+# this plan must be documented as amendments in a separate file.
+# ==============================================================================
+
+meta:
+  phase_id: Phase3_PEFT
+  registered_at: "2026-07-18T00:00:00Z"
+  registered_by: derek_mayabi
+  supervisor: dr_lawrence_nderu
+  spec_version: "1.0"
+
+# ------------------------------------------------------------------------------
+# Baseline: Phase 2 winning cell
+# ------------------------------------------------------------------------------
+baseline:
+  cell_id: RUN-P2-C05-S2
+  checkpoint: /workspace/checkpoints/RUN-P2-C05-S2/checkpoint-5400
+  per_language_baseline: /workspace/results/PHASE2_BASELINE_C05-S2_per_language.json
+  metrics_pph:
+    swahili_authentic: 15.9547
+    sheng: 22.6537
+    luo: 25.3959
+    kikuyu: 33.3504
+    kamba: 46.4522
+    pooled: 24.6310
+  frozen_config:
+    optimiser: AdamW
+    batch_size: 256
+    sequence_length: 1024
+    lr_schedule: cosine
+    data_ordering: curriculum
+    seed: 137
+    lora_r: 16
+    lora_alpha: 32
+    lora_dropout: 0.05
+    peak_lr: 2.0e-4
+
+# ------------------------------------------------------------------------------
+# Corpus: filtered clean version shared by all Phase 3 runs
+# ------------------------------------------------------------------------------
+corpus:
+  path: /workspace/data/corpus/splits_v2/pathD_v2_filtered
+  status: NOT_YET_BUILT
+  built_from: /workspace/data/corpus/splits_v2/pathD
+  contamination_index: /workspace/data/corpus/audits/contamination_v1/contamination_index.csv
+  exclude_categories:
+    - likely_generator_drift
+    - likely_generator_drift_or_scraping
+    - likely_scraped_multilingual_content
+  keep_categories:
+    - likely_legitimate_religious
+    - possibly_legitimate_loanword
+    - possibly_legitimate_label
+    - unclear
+  expected_removals: 250-300
+  expected_records_remaining: ~1380223
+  validation_split: /workspace/data/corpus/splits_v2/validation_shared_v3.jsonl  # unchanged
+  test_split: /workspace/data/corpus/splits_v2/test_shared_v3.jsonl  # unchanged
+
+# ------------------------------------------------------------------------------
+# Runs
+# ------------------------------------------------------------------------------
+runs:
+
+  - id: RUN-P3-CLEAN-QLORA
+    order: 1
+    method: qlora_r16
+    purpose: >
+      Fair baseline for method comparison on the filtered clean corpus.
+      Controls for the corpus change so FFT and CPT are compared against
+      a like-for-like reference on the same data.
+    hypothesis: >
+      Filtered corpus produces aggregate pph within noise of Phase 2 C05-S2
+      (~24.6 +/- 0.5). A large deviation would reveal corpus cleaning as
+      a confound requiring separate study.
+    training:
+      peft_method: qlora_r16
+      peak_lr: 2.0e-4
+      warmup_steps: 100
+      weight_decay: 0.0
+      max_steps: 6000
+      trainable_parameters: 74700000
+    compute:
+      est_gpu_hours: 20
+      est_wall_clock_hours: 3
+      grant_impact_percent: 0.06
+    checkpoint_output: /workspace/checkpoints/RUN-P3-CLEAN-QLORA
+    launch_script: /workspace/scripts/phase3_qlora.sh
+    depends_on:
+      - corpus.path built
+      - train_orchestrator.py accepts --peak-lr override (if changing from default)
+
+  - id: RUN-P3-FFT
+    order: 2
+    method: full_ft
+    purpose: >
+      Test whether updating all 8B parameters materially improves quality
+      over LoRA-based adaptation.  Focus: Kamba (baseline pph 46.45) where
+      corpus scarcity most limits QLoRA.
+    hypothesis: >
+      FFT measurably improves Kamba (>10% pph reduction) but marginally
+      improves Swahili (already at 15.95, near ceiling).  Uniform improvement
+      across all languages would contradict the compute-efficient adaptation
+      hypothesis for low-resource language addition.
+    training:
+      peft_method: full_ft
+      peak_lr: 2.0e-5           # 10x lower than QLoRA (standard for FFT)
+      warmup_steps: 200         # 2x QLoRA for stability
+      weight_decay: 0.01
+      max_steps: 6000
+      trainable_parameters: 8030000000
+      deepspeed_config: /workspace/configs/ds_config_zero3.json  # NOT_YET_WRITTEN
+      gradient_checkpointing: true
+    compute:
+      est_gpu_hours: 200
+      est_wall_clock_hours: 25
+      grant_impact_percent: 0.63
+      memory_footprint_gb_per_gpu: ~65
+    checkpoint_output: /workspace/checkpoints/RUN-P3-FFT
+    launch_script: /workspace/scripts/phase3_fft.sh
+    depends_on:
+      - RUN-P3-CLEAN-QLORA complete
+      - DeepSpeed ZeRO-3 config exists and validated
+      - training_loop.py FFT code path implemented
+    risks:
+      memory_pressure:
+        mitigation: reduce batch_size to 128 if OOM
+        cost_of_mitigation: comparability degraded (would need to re-baseline QLoRA at 128)
+      divergence:
+        mitigation: reduce peak_lr to 1e-5 if loss doesn't drop in first 500 steps
+        cost_of_mitigation: minor documentation update
+      checkpoint_format:
+        mitigation: verify eval script handles sharded full-model weights
+        pre_check: run smoke test with 500 steps and reload
+
+  - id: RUN-P3-CPT
+    order: 3
+    method: cpt
+    purpose: >
+      Test whether continuing Llama-3.1-8B's original pre-training objective
+      on East African text builds better language competence than task-oriented
+      QLoRA fine-tuning.  Different from FFT: uses natural token ordering and
+      language-model objective without curriculum reweighting.
+    hypothesis: >
+      CPT produces more balanced per-language quality than QLoRA, trading peak
+      Swahili performance for improved Kikuyu/Kamba (since CPT sees data
+      proportionally without curriculum).  Expected: pph gap between Swahili
+      and Kamba narrows by >20%.
+    training:
+      peft_method: cpt
+      peak_lr: 1.0e-5           # 20x lower than QLoRA
+      warmup_steps: 500         # longer warmup for continued pre-training
+      weight_decay: 0.1
+      max_steps: 12000          # 2x QLoRA due to natural (unweighted) order
+      token_budget: 500000000
+      trainable_parameters: 8030000000
+      data_ordering_override: mixed  # override C05's curriculum
+      deepspeed_config: /workspace/configs/ds_config_zero3.json
+      gradient_checkpointing: true
+    compute:
+      est_gpu_hours: 800
+      est_wall_clock_hours: 100
+      grant_impact_percent: 2.50
+    checkpoint_output: /workspace/checkpoints/RUN-P3-CPT
+    launch_script: /workspace/scripts/phase3_cpt.sh
+    depends_on:
+      - RUN-P3-FFT complete (validates DeepSpeed pipeline)
+      - CPT code path implemented (differs from FFT in objective)
+    risks:
+      catastrophic_forgetting:
+        mitigation: track English pph pre and post training
+        threshold: if English pph increases >2x, flag as concerning
+      wall_clock_duration:
+        mitigation: intermediate checkpointing every 2000 steps
+        recovery: resume from last checkpoint if interrupted
+
+# ------------------------------------------------------------------------------
+# Evaluation: identical protocol for all three checkpoints
+# ------------------------------------------------------------------------------
+evaluation:
+  script: /workspace/scripts/eval_per_language_5tracks.py
+  tracks:
+    - swahili_authentic
+    - sheng
+    - luo
+    - kikuyu
+    - kamba
+    - pooled
+  primary_metric: per_language_pph_delta_vs_baseline
+  secondary_metrics:
+    - aggregate_pph
+    - kamba_pph_delta
+    - pph_range_across_languages
+  english_forgetting_check:
+    applies_to: [RUN-P3-CPT]
+    metric: English pph on held-out English set
+    threshold_for_concern: 2x increase from base model
+
+# ------------------------------------------------------------------------------
+# Method selection (IES ranking)
+# ------------------------------------------------------------------------------
+decision:
+  metric_name: Intervention Efficiency Score
+  formula: >
+    IES(method) = (baseline_pooled_pph - method_pooled_pph)
+                  / (method_gpu_hr - qlora_baseline_gpu_hr)
+  ranking_criterion: higher_ies_wins
+  tiebreak_order:
+    - kamba_pph (lower wins)
+    - worst_language_pph (lower wins)
+  minimum_gain_to_switch_from_qlora:
+    aggregate_pph: 2.0 points lower
+    kamba_pph: 5.0 points lower
+    both_required: true
+  output_document: /workspace/results/phase3_method_comparison.md
+  production_model_selection:
+    default: RUN-P3-CLEAN-QLORA (if thresholds not met)
+    alternative: whichever method meets thresholds AND has best IES
+
+# ------------------------------------------------------------------------------
+# Resource plan
+# ------------------------------------------------------------------------------
+budget:
+  total_estimated_gpu_hours: 1020
+  grant_impact_percent: 3.19
+  remaining_grant_after_phase3: ~30000
+  wall_clock_days_estimated: 14-16
+
+# ------------------------------------------------------------------------------
+# What must be true before Phase 3 can start
+# ------------------------------------------------------------------------------
+preconditions:
+  - status: BLOCKED
+    item: build_filtered_corpus.py exists and produces pathD_v2_filtered/
+    owner: derek
+  - status: BLOCKED
+    item: ds_config_zero3.json exists at /workspace/configs/
+    owner: derek
+  - status: BLOCKED
+    item: training_loop.py FFT path implemented (replaces NotImplementedError)
+    owner: derek
+  - status: BLOCKED
+    item: training_loop.py CPT path implemented (new)
+    owner: derek
+  - status: BLOCKED
+    item: train_orchestrator.py accepts --peak-lr, --warmup-steps, --weight-decay
+    owner: derek
+  - status: BLOCKED
+    item: FFT smoke test (500 steps) succeeds without OOM
+    owner: derek
+  - status: BLOCKED
+    item: CPT smoke test (500 steps) succeeds without OOM
+    owner: derek
+  - status: COMPLETE
+    item: Phase 2 factorial results frozen
+    location: /workspace/results/phase2_final_analysis.md
+  - status: COMPLETE
+    item: C05-S2 per-language baseline established
+    location: /workspace/results/PHASE2_BASELINE_C05-S2_per_language.json

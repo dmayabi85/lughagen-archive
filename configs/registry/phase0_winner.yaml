@@ -1,0 +1,70 @@
+winner_strategy: C
+winner_tokenizer_path: /workspace/data/processed/tokenizers/strategy_c
+winner_final_fertility:
+  swahili: 1.6446024737959624
+  kikuyu: 1.972663358147229
+  kamba: 2.012873545444002
+  luo: 1.788728300790023
+mean_fertility: 1.854716919544304
+selected_at: '2026-05-18T08:05:32Z'
+qualitative_validation:
+  swahili: native-like splits, morphologically sensible
+  kikuyu: "recognizes noun-class prefixes, handles \u0169/\u0129"
+  kamba: "clean splits, handles \u0129/\u0169 diacritics"
+  luo: reasonable splits, handles dh/ny digraphs
+  verified_via: manual inspection of 12 representative samples (3 per language)
+all_strategies_attempted:
+  A:
+    status: completed
+    mean_fertility: 2.3457400390066865
+    per_language:
+      swahili: 2.101900845943851
+      kikuyu: 2.6910669975186106
+      kamba: 2.651873042873159
+      luo: 1.9381192696911247
+    note: 'LLaMA tokenizer extended with 5,528 BPE tokens. Functional but underperformed
+      C: existing LLaMA BPE merge order dominates encoding; added tokens rarely selected.'
+  B:
+    status: abandoned
+    reason: 'transformers 5.8.1 incompatibility with SentencePiece BPE wrapping. Eight
+      integration iterations attempted: LlamaTokenizerFast(vocab_file=) silently produces
+      vocab_size=3; LlamaTokenizer (slow) has same issue; SpmConverter requires protobuf
+      (installed) but then raises AttributeError on model_type protobuf field; disabling
+      byte_fallback did not resolve; manual protobuf parsing + merge reconstruction
+      succeeded mechanically but produced character-level tokenization rather than
+      applying trained merges (16 tokens for "nyumba ya mtoto" vs 3 native SP tokens).
+      Producing a Fast tokenizer that faithfully replicates native SP-BPE encoding
+      requires significant implementation work beyond project scope.'
+    sp_model_trained_successfully: true
+    sp_model_vocab_size: 8000
+    sp_model_path_archived: /workspace/data/processed/tokenizers/strategy_b.bak-*
+    debug_logs: /workspace/logs/phase0_*.log
+  C:
+    status: completed
+    mean_fertility: 1.854716919544304
+    per_language:
+      swahili: 1.6446024737959624
+      kikuyu: 1.972663358147229
+      kamba: 2.012873545444002
+      luo: 1.788728300790023
+    note: ByteLevelBPE via tokenizers library directly. Algorithm underlying GPT-2/3/4,
+      RoBERTa, LLaMA-3. Worked first attempt. Best fertility across all four target
+      languages, verified qualitatively.
+baseline_comparison:
+  llama_stock_swahili: 2.32
+  llama_stock_kikuyu: 3.03
+  llama_stock_kamba: 2.85
+  llama_stock_luo: 1.82
+  strategy_c_improvement:
+    swahili: 29% better
+    kikuyu: 35% better
+    kamba: 29% better
+    luo: 2% better (already near-optimal in stock)
+    pooled_mean: 26% better
+selection_rationale: 'Strategy C selected as production tokenizer based on: (a) best
+  fertility measurements across all four target languages, (b) qualitative inspection
+  confirming morphologically sensible splits (including Bantu noun-class prefixes
+  and language-specific diacritics), (c) successful training and HF wrapping without
+  library-version incompatibilities, (d) algorithmic alignment with current standard
+  practice (ByteLevelBPE used by GPT-N, LLaMA-3). Strategy B abandoned after eight
+  unsuccessful integration iterations documented above.'

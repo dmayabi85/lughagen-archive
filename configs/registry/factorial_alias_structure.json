@@ -1,0 +1,93 @@
+{
+  "alias_structure": {
+    "A": [
+      "BCDE"
+    ],
+    "AB": [
+      "CDE"
+    ],
+    "AC": [
+      "BDE"
+    ],
+    "AD": [
+      "BCE"
+    ],
+    "AE": [
+      "BCD"
+    ],
+    "B": [
+      "ACDE"
+    ],
+    "BC": [
+      "ADE"
+    ],
+    "BD": [
+      "ACE"
+    ],
+    "BE": [
+      "ACD"
+    ],
+    "C": [
+      "ABDE"
+    ],
+    "CD": [
+      "ABE"
+    ],
+    "CE": [
+      "ABD"
+    ],
+    "D": [
+      "ABCE"
+    ],
+    "DE": [
+      "ABC"
+    ],
+    "E": [
+      "ABCD"
+    ],
+    "I": [
+      "ABCDE"
+    ]
+  },
+  "defining_relation": "E = ABCD",
+  "factor_mapping": {
+    "A": {
+      "field": "lr_schedule",
+      "levels": {
+        "-1": "cosine",
+        "1": "linear_warmup_constant"
+      }
+    },
+    "B": {
+      "field": "batch_size",
+      "levels": {
+        "-1": 128,
+        "1": 256
+      }
+    },
+    "C": {
+      "field": "optimiser",
+      "levels": {
+        "-1": "AdamW",
+        "1": "Lion"
+      }
+    },
+    "D": {
+      "field": "sequence_length",
+      "levels": {
+        "-1": 1024,
+        "1": 2048
+      }
+    },
+    "E": {
+      "field": "data_ordering",
+      "levels": {
+        "-1": "curriculum",
+        "1": "mixed"
+      }
+    }
+  },
+  "identity": "I = ABCDE",
+  "note": "Main effects aliased with 4-factor interactions (negligible). Two-factor interactions aliased with 3-factor interactions (negligible). Main effects and two-factor interactions are clean.",
+  "resolution": "V"
+}

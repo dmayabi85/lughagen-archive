@@ -1,0 +1,40 @@
+{
+  "_comment_purpose": "DeepSpeed ZeRO-3 config for Phase 3.5 CPT of Gemma-2-27B on 8xA100 80GB (with CPU optimizer offload)",
+  "_comment_memory": "27B params in bf16 = 54GB weights, sharded across 8 GPUs = ~7GB weights/GPU. Optimizer states (AdamW: 8 bytes/param * 27B = 216GB) offloaded to CPU. Gradients sharded = ~7GB/GPU. Plus activations ~30GB/GPU with grad checkpointing + partition. Total: ~44GB/GPU peak, fits in 80GB. CPU RAM required: 216GB+ (available: 1.9TB).",
+  "train_batch_size": "auto",
+  "train_micro_batch_size_per_gpu": "auto",
+  "gradient_accumulation_steps": "auto",
+  "bf16": {
+    "enabled": true
+  },
+  "zero_optimization": {
+    "stage": 3,
+    "overlap_comm": true,
+    "contiguous_gradients": true,
+    "sub_group_size": 1000000000,
+    "reduce_bucket_size": "auto",
+    "stage3_prefetch_bucket_size": "auto",
+    "stage3_param_persistence_threshold": "auto",
+    "stage3_max_live_parameters": 1000000000,
+    "stage3_max_reuse_distance": 1000000000,
+    "stage3_gather_16bit_weights_on_model_save": true,
+    "offload_optimizer": {
+      "device": "cpu",
+      "pin_memory": true
+    },
+    "offload_param": {
+      "device": "none"
+    }
+  },
+  "gradient_clipping": "auto",
+  "steps_per_print": 5,
+  "wall_clock_breakdown": false,
+  "activation_checkpointing": {
+    "partition_activations": true,
+    "cpu_checkpointing": false,
+    "contiguous_memory_optimization": false,
+    "number_checkpoints": null,
+    "synchronize_checkpoint_boundary": false,
+    "profile": false
+  }
+}
