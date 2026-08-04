@@ -1,0 +1,57 @@
+{
+  "checkpoint": "/workspace/checkpoints/RUN-P3-CLEAN-QLORA/checkpoint-6000",
+  "val_file": "/workspace/data/corpus/splits_v2/validation_shared_v3.jsonl",
+  "seq_len": 1024,
+  "per_device_batch": 4,
+  "dry_run": false,
+  "results": {
+    "swahili_authentic": {
+      "label": "swahili_authentic",
+      "eval_loss": 2.7716577508362823,
+      "perplexity": 15.98511138905487,
+      "n_samples": 1476,
+      "n_tokens": 136869,
+      "eval_runtime_s": 173.1124427318573
+    },
+    "kikuyu": {
+      "label": "kikuyu",
+      "eval_loss": 3.5036621599969786,
+      "perplexity": 33.23694837601039,
+      "n_samples": 1500,
+      "n_tokens": 59932,
+      "eval_runtime_s": 175.4226279258728
+    },
+    "luo": {
+      "label": "luo",
+      "eval_loss": 3.226375709739127,
+      "perplexity": 25.188201986218818,
+      "n_samples": 1500,
+      "n_tokens": 40480,
+      "eval_runtime_s": 175.18007898330688
+    },
+    "kamba": {
+      "label": "kamba",
+      "eval_loss": 3.8410237719712117,
+      "perplexity": 46.573130306676006,
+      "n_samples": 1500,
+      "n_tokens": 63105,
+      "eval_runtime_s": 175.4135823249817
+    },
+    "sheng": {
+      "label": "sheng",
+      "eval_loss": 3.1196480152678996,
+      "perplexity": 22.638409866005873,
+      "n_samples": 1500,
+      "n_tokens": 65272,
+      "eval_runtime_s": 175.44956183433533
+    },
+    "pooled": {
+      "label": "pooled",
+      "eval_loss": 3.2036346389820602,
+      "perplexity": 24.62185932892376,
+      "n_samples": 5976,
+      "n_tokens": 300386,
+      "eval_runtime_s": 699.0597469806671
+    }
+  }
+}

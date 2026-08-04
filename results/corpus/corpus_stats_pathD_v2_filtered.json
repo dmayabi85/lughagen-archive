@@ -1,0 +1,215 @@
+{
+  "corpus_path": "/workspace/data/corpus/splits_v2/pathD_v2_filtered/train.jsonl",
+  "total_records": 1380264,
+  "totals": {
+    "by_language": {
+      "swahili": {
+        "count": 791495,
+        "share": "57.34%"
+      },
+      "luo": {
+        "count": 345178,
+        "share": "25.01%"
+      },
+      "kikuyu": {
+        "count": 151638,
+        "share": "10.99%"
+      },
+      "kamba": {
+        "count": 91953,
+        "share": "6.66%"
+      }
+    },
+    "by_origin": {
+      "authentic": {
+        "count": 946770,
+        "share": "68.59%"
+      },
+      "synthetic": {
+        "count": 433494,
+        "share": "31.41%"
+      }
+    },
+    "by_register": {
+      "monolingual": {
+        "count": 1197886,
+        "share": "86.79%"
+      },
+      "code_switched": {
+        "count": 182378,
+        "share": "13.21%"
+      }
+    }
+  },
+  "per_language": {
+    "swahili": {
+      "records": 791495,
+      "share_of_corpus": "57.34%",
+      "total_words": 37419594,
+      "avg_words_per_record": 47.3,
+      "length_pctiles_words": {
+        "p10": 8,
+        "p50": 24,
+        "p90": 149,
+        "p99": 422
+      },
+      "by_origin": {
+        "authentic": {
+          "count": 499993,
+          "share": "63.17%"
+        },
+        "synthetic": {
+          "count": 291502,
+          "share": "36.83%"
+        }
+      },
+      "by_register": {
+        "monolingual": {
+          "count": 609117,
+          "share": "76.96%"
+        },
+        "code_switched": {
+          "count": 182378,
+          "share": "23.04%"
+        }
+      },
+      "top_sources": [
+        {
+          "source": "auth_clean_v1_swahili",
+          "count": 499993,
+          "share": "63.17%"
+        },
+        {
+          "source": "swahili_sheng_v1",
+          "count": 182378,
+          "share": "23.04%"
+        },
+        {
+          "source": "swahili_lughagen_synth_mono_v2",
+          "count": 109124,
+          "share": "13.79%"
+        }
+      ]
+    },
+    "luo": {
+      "records": 345178,
+      "share_of_corpus": "25.01%",
+      "total_words": 5557452,
+      "avg_words_per_record": 16.1,
+      "length_pctiles_words": {
+        "p10": 6,
+        "p50": 13,
+        "p90": 26,
+        "p99": 45
+      },
+      "by_origin": {
+        "authentic": {
+          "count": 319075,
+          "share": "92.44%"
+        },
+        "synthetic": {
+          "count": 26103,
+          "share": "7.56%"
+        }
+      },
+      "by_register": {
+        "monolingual": {
+          "count": 345178,
+          "share": "100.00%"
+        }
+      },
+      "top_sources": [
+        {
+          "source": "auth_clean_v1_luo",
+          "count": 319075,
+          "share": "92.44%"
+        },
+        {
+          "source": "luo_lughagen_synth_mono_v2",
+          "count": 26103,
+          "share": "7.56%"
+        }
+      ]
+    },
+    "kikuyu": {
+      "records": 151638,
+      "share_of_corpus": "10.99%",
+      "total_words": 3231028,
+      "avg_words_per_record": 21.3,
+      "length_pctiles_words": {
+        "p10": 6,
+        "p50": 14,
+        "p90": 32,
+        "p99": 131
+      },
+      "by_origin": {
+        "authentic": {
+          "count": 91987,
+          "share": "60.66%"
+        },
+        "synthetic": {
+          "count": 59651,
+          "share": "39.34%"
+        }
+      },
+      "by_register": {
+        "monolingual": {
+          "count": 151638,
+          "share": "100.00%"
+        }
+      },
+      "top_sources": [
+        {
+          "source": "auth_clean_v1_kikuyu",
+          "count": 91987,
+          "share": "60.66%"
+        },
+        {
+          "source": "kikuyu_lughagen_synth_mono_v2",
+          "count": 59651,
+          "share": "39.34%"
+        }
+      ]
+    },
+    "kamba": {
+      "records": 91953,
+      "share_of_corpus": "6.66%",
+      "total_words": 1939492,
+      "avg_words_per_record": 21.1,
+      "length_pctiles_words": {
+        "p10": 6,
+        "p50": 12,
+        "p90": 23,
+        "p99": 36
+      },
+      "by_origin": {
+        "authentic": {
+          "count": 35715,
+          "share": "38.84%"
+        },
+        "synthetic": {
+          "count": 56238,
+          "share": "61.16%"
+        }
+      },
+      "by_register": {
+        "monolingual": {
+          "count": 91953,
+          "share": "100.00%"
+        }
+      },
+      "top_sources": [
+        {
+          "source": "kamba_lughagen_synth_mono_v2",
+          "count": 56238,
+          "share": "61.16%"
+        },
+        {
+          "source": "auth_clean_v1_kamba",
+          "count": 35715,
+          "share": "38.84%"
+        }
+      ]
+    }
+  }
+}

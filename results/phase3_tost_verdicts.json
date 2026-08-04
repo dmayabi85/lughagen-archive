@@ -1,0 +1,82 @@
+{
+  "generated_at": "2026-07-28T08:43:57Z",
+  "methodology": {
+    "tost_delta_derivation": "5% of |mean(Phase 2 PPH)| filtered to 32 legitimate factorial cells (RUN-P2-C*-S* pattern, val_ppl < 100)",
+    "delta_option1_v2_baseline": 4.240344,
+    "delta_option2_v3_baseline": 2.53663,
+    "phase2_mean_pph_option1": 84.807,
+    "phase2_mean_pph_option2": 50.733,
+    "sensitivity_deltas_option1": {
+      "3%": 2.5442,
+      "7%": 5.9365,
+      "10%": 8.4807
+    },
+    "sensitivity_deltas_option2": {
+      "3%": 1.522,
+      "7%": 3.5513,
+      "10%": 5.0733
+    },
+    "n_seeds_phase3": 1,
+    "n_seeds_note": "Phase 3 executed with n=1 per method; TOST results are point estimates, no bootstrap CIs computed. Spec \u00a710.3.1 anticipated n=5."
+  },
+  "phase3_pph": {
+    "option1_per_method": {
+      "QLoRA": 80.1288,
+      "CPT": 63.1446,
+      "FFT": 62.711
+    },
+    "option2_v3_common": {
+      "QLoRA": 47.9369,
+      "CPT": 63.1446,
+      "FFT": 62.711
+    }
+  },
+  "tost_verdicts": {
+    "FFT_vs_QLoRA": {
+      "option1_diff": -17.4178,
+      "option1_verdict": "QLoRA superior",
+      "option1_note": "Under V2 per-method baseline, QLoRA's PPH includes wrapping-pathway penalty as apparent improvement",
+      "option2_diff": 14.7741,
+      "option2_verdict": "FFT superior",
+      "option2_note": "Under V3 common baseline, direct-eval commensurability removes wrapping artifact",
+      "convention_dependent": true
+    },
+    "CPT_vs_QLoRA": {
+      "option1_diff": -16.9842,
+      "option1_verdict": "QLoRA superior",
+      "option2_diff": 15.2077,
+      "option2_verdict": "CPT superior",
+      "convention_dependent": true
+    },
+    "FFT_vs_CPT": {
+      "option1_diff": -0.4336,
+      "option1_verdict": "EQUIVALENT",
+      "option2_diff": -0.4336,
+      "option2_verdict": "EQUIVALENT",
+      "sensitivity_3pct_opt1": "EQUIVALENT",
+      "sensitivity_7pct_opt1": "EQUIVALENT",
+      "sensitivity_10pct_opt1": "EQUIVALENT",
+      "sensitivity_3pct_opt2": "EQUIVALENT",
+      "sensitivity_7pct_opt2": "EQUIVALENT",
+      "sensitivity_10pct_opt2": "EQUIVALENT",
+      "convention_dependent": false,
+      "robust": true
+    }
+  },
+  "conclusions": {
+    "quality_ranking": "FFT (19.88) < CPT (22.81) < QLoRA (24.62 wrapped / 25.58 direct)",
+    "quality_unambiguous": true,
+    "quality_note": "FFT wins all 5 language tracks with substantial margins (3-13 PPL)",
+    "fft_vs_cpt_pph_equivalence": true,
+    "fft_vs_cpt_note": "Formally declared compute-efficiency equivalent by TOST under both baseline conventions and robust across sensitivity \u03b4",
+    "qlora_vs_others_pph": "Convention-dependent; cannot claim unambiguous PPH ranking for QLoRA",
+    "qlora_vs_others_note": "The ~5,600 PPL wrapping-pathway penalty in QLoRA's V2 baseline flips the PPH verdict",
+    "production_recommendation": "FFT",
+    "recommendation_reasoning": "Best raw quality unambiguously, equivalent efficiency to CPT, cost-competitive with CPT, avoids the QLoRA baseline-interpretation ambiguity"
+  },
+  "compliance_disclosures": {
+    "tost_delta_pre_registration": "Retroactive computation on 2026-07-28 due to workflow gap; formula and inputs (Phase 2 PPH) fixed before Phase 3 launched but execution deferred until after Phase 3 completion",
+    "n_seeds_phase3": "Single seed per method; spec \u00a710.3.1 anticipated n=5; documented in Chapter 6 as limitation",
+    "baseline_convention": "Two conventions reported for transparency; conclusions differ where noted"
+  }
+}

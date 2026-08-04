@@ -1,0 +1,32 @@
+{
+  "swahili_authentic": {
+    "perplexity": 7151.369807453326,
+    "tokens": 136241,
+    "n_records": 1461
+  },
+  "kikuyu": {
+    "perplexity": 8573.20284527544,
+    "tokens": 59932,
+    "n_records": 1500
+  },
+  "luo": {
+    "perplexity": 16089.553382968757,
+    "tokens": 40480,
+    "n_records": 1500
+  },
+  "kamba": {
+    "perplexity": 7480.476629129508,
+    "tokens": 63105,
+    "n_records": 1500
+  },
+  "sheng": {
+    "perplexity": 13542.597854015734,
+    "tokens": 65272,
+    "n_records": 1500
+  },
+  "pooled": {
+    "perplexity": 8364.211098630929,
+    "tokens": 300386,
+    "n_records": 5976
+  }
+}

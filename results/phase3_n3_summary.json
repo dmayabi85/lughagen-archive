@@ -1,0 +1,207 @@
+{
+  "generated_at": "2026-08-01",
+  "note": "Chapter 5 canonical numbers. Report BOTH sources; eval-script is systematically higher (see offset).",
+  "offset_by_method": {
+    "FFT": "+1.68% (consistent across seeds)",
+    "CPT": "+2.80%",
+    "QLoRA_clean": "+3.94%"
+  },
+  "pooled_registry": {
+    "FFT": {
+      "n": 3,
+      "values": [
+        19.55013,
+        19.58924,
+        19.56779
+      ],
+      "mean": 19.569053333333333,
+      "std": 0.019585582282213406,
+      "min": 19.55013,
+      "max": 19.58924,
+      "range": 0.039110000000000866
+    },
+    "CPT": {
+      "n": 3,
+      "values": [
+        22.19251,
+        22.29,
+        22.29217
+      ],
+      "mean": 22.258226666666662,
+      "std": 0.056922644293227916,
+      "min": 22.19251,
+      "max": 22.29217,
+      "range": 0.09966000000000008
+    },
+    "QLORA_clean": 23.68939
+  },
+  "pooled_eval_script": {
+    "FFT": {
+      "n": 3,
+      "values": [
+        19.8789,
+        19.9185,
+        19.8882
+      ],
+      "mean": 19.895200000000003,
+      "std": 0.020707245108898584,
+      "min": 19.8789,
+      "max": 19.9185,
+      "range": 0.03960000000000008
+    },
+    "CPT": {
+      "n": 2,
+      "values": [
+        22.812,
+        22.916
+      ],
+      "mean": 22.864,
+      "std": 0.07353910524340038,
+      "min": 22.812,
+      "max": 22.916,
+      "range": 0.1039999999999992
+    },
+    "QLORA_clean_direct": 24.6219,
+    "QLORA_merged_direct": 25.5755
+  },
+  "per_language_eval_script": {
+    "FFT_n3": {
+      "swahili_authentic": {
+        "n": 3,
+        "values": [
+          13.422,
+          13.443,
+          13.41
+        ],
+        "mean": 13.425000000000002,
+        "std": 0.01670329308848974,
+        "min": 13.41,
+        "max": 13.443,
+        "range": 0.032999999999999474
+      },
+      "kikuyu": {
+        "n": 3,
+        "values": [
+          26.52,
+          26.58,
+          26.618
+        ],
+        "mean": 26.572666666666663,
+        "std": 0.04940985056983351,
+        "min": 26.52,
+        "max": 26.618,
+        "range": 0.09799999999999898
+      },
+      "luo": {
+        "n": 3,
+        "values": [
+          19.567,
+          19.8,
+          19.544
+        ],
+        "mean": 19.637,
+        "std": 0.14162979912433704,
+        "min": 19.544,
+        "max": 19.8,
+        "range": 0.2560000000000002
+      },
+      "kamba": {
+        "n": 3,
+        "values": [
+          35.801,
+          35.67,
+          35.848
+        ],
+        "mean": 35.773,
+        "std": 0.09224424101264968,
+        "min": 35.67,
+        "max": 35.848,
+        "range": 0.17799999999999727
+      },
+      "sheng": {
+        "n": 3,
+        "values": [
+          14.471,
+          14.576,
+          14.69
+        ],
+        "mean": 14.579,
+        "std": 0.10953081758117181,
+        "min": 14.471,
+        "max": 14.69,
+        "range": 0.21899999999999942
+      }
+    },
+    "CPT_n2": {
+      "swahili_authentic": {
+        "n": 2,
+        "values": [
+          14.477,
+          14.516
+        ],
+        "mean": 14.496500000000001,
+        "std": 0.027577164466275145,
+        "min": 14.477,
+        "max": 14.516,
+        "range": 0.0389999999999997
+      },
+      "kikuyu": {
+        "n": 2,
+        "values": [
+          31.61,
+          31.758
+        ],
+        "mean": 31.683999999999997,
+        "std": 0.10465180361560882,
+        "min": 31.61,
+        "max": 31.758,
+        "range": 0.1479999999999997
+      },
+      "luo": {
+        "n": 2,
+        "values": [
+          24.354,
+          24.507
+        ],
+        "mean": 24.430500000000002,
+        "std": 0.10818733752154336,
+        "min": 24.354,
+        "max": 24.507,
+        "range": 0.15300000000000225
+      },
+      "kamba": {
+        "n": 2,
+        "values": [
+          43.023,
+          43.345
+        ],
+        "mean": 43.184,
+        "std": 0.22768838354206522,
+        "min": 43.023,
+        "max": 43.345,
+        "range": 0.3219999999999956
+      },
+      "sheng": {
+        "n": 2,
+        "values": [
+          17.53,
+          17.669
+        ],
+        "mean": 17.5995,
+        "std": 0.09828784258492965,
+        "min": 17.53,
+        "max": 17.669,
+        "range": 0.13899999999999935
+      }
+    }
+  },
+  "cross_method_delta_registry": {
+    "cpt_minus_fft": 2.689173333333329,
+    "fft_better_pct": 13.741969463349935
+  },
+  "cross_method_delta_eval_script": {
+    "cpt_minus_fft": 2.968799999999998,
+    "fft_better_pct": 14.922192287586945
+  },
+  "known_incident_seed42_cpt": "Seed 42 CPT (rerun with correct config) produced pooled 22.29 in registry, but checkpoint deleted by retention race between HF Trainer save_total_limit=1 and custom TopKCheckpointManager. Per-language eval unavailable."
+}

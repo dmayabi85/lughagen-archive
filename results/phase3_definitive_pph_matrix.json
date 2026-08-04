@@ -1,0 +1,134 @@
+{
+  "generated_at": "2026-07-28T08:28:04Z",
+  "methodology": {
+    "evaluation_pathway": "direct HuggingFace causal LM forward pass, no LoRA wrapping",
+    "qlora_note": "QLoRA checkpoint merged to bf16 base weights via peft.merge_and_unload before eval, for pathway commensurability with FFT/CPT",
+    "baseline_source": "untuned Llama-3.1-8B with strategy_c tokenizer resize (128k->8k) and token-aware embedding remap applied",
+    "tokenizer": "/workspace/data/processed/tokenizers/strategy_c",
+    "corpus": "/workspace/data/corpus/splits_v2/pathD_v2_filtered/validation_shared_v3.jsonl",
+    "sheng_source": "/workspace/data/corpus/splits_v2/sheng_val.jsonl"
+  },
+  "baselines_per_language": {
+    "swahili_authentic": 7151.37,
+    "sheng": 13542.6,
+    "luo": 16089.55,
+    "kikuyu": 8573.2,
+    "kamba": 7480.48,
+    "pooled": 8364.21
+  },
+  "methods": {
+    "QLoRA_merged": {
+      "gpu_hours": 173.95,
+      "per_language_pph": {
+        "swahili_authentic": 16.34,
+        "sheng": 24.18,
+        "luo": 26.46,
+        "kikuyu": 35.1,
+        "kamba": 48.94,
+        "pooled": 25.58
+      }
+    },
+    "CPT": {
+      "gpu_hours": 132.1,
+      "per_language_pph": {
+        "swahili_authentic": 14.48,
+        "sheng": 17.53,
+        "luo": 24.35,
+        "kikuyu": 31.61,
+        "kamba": 43.02,
+        "pooled": 22.81
+      }
+    },
+    "FFT": {
+      "gpu_hours": 133.06,
+      "per_language_pph": {
+        "swahili_authentic": 13.42,
+        "sheng": 14.47,
+        "luo": 19.57,
+        "kikuyu": 26.52,
+        "kamba": 35.8,
+        "pooled": 19.88
+      }
+    }
+  },
+  "pph_linear": {
+    "swahili_authentic": {
+      "QLoRA_merged": 41.0177,
+      "CPT": 54.0264,
+      "FFT": 53.6446
+    },
+    "sheng": {
+      "QLoRA_merged": 77.7144,
+      "CPT": 102.3851,
+      "FFT": 101.6694
+    },
+    "luo": {
+      "QLoRA_merged": 92.3431,
+      "CPT": 121.6139,
+      "FFT": 120.7724
+    },
+    "kikuyu": {
+      "QLoRA_merged": 49.0836,
+      "CPT": 64.66,
+      "FFT": 64.2318
+    },
+    "kamba": {
+      "QLoRA_merged": 42.7223,
+      "CPT": 56.3017,
+      "FFT": 55.9498
+    },
+    "pooled": {
+      "QLoRA_merged": 47.9369,
+      "CPT": 63.1446,
+      "FFT": 62.711
+    }
+  },
+  "pph_log_ratio": {
+    "swahili_authentic": {
+      "QLoRA_merged": 0.034961,
+      "CPT": 0.046951,
+      "FFT": 0.047184
+    },
+    "sheng": {
+      "QLoRA_merged": 0.036379,
+      "CPT": 0.050338,
+      "FFT": 0.051417
+    },
+    "luo": {
+      "QLoRA_merged": 0.036851,
+      "CPT": 0.049155,
+      "FFT": 0.050443
+    },
+    "kikuyu": {
+      "QLoRA_merged": 0.031608,
+      "CPT": 0.042414,
+      "FFT": 0.043428
+    },
+    "kamba": {
+      "QLoRA_merged": 0.028913,
+      "CPT": 0.039049,
+      "FFT": 0.040148
+    },
+    "pooled": {
+      "QLoRA_merged": 0.033285,
+      "CPT": 0.044697,
+      "FFT": 0.045408
+    }
+  },
+  "winners_linear": {
+    "swahili_authentic": "CPT",
+    "sheng": "CPT",
+    "luo": "CPT",
+    "kikuyu": "CPT",
+    "kamba": "CPT",
+    "pooled": "CPT"
+  },
+  "winners_log_ratio": {
+    "swahili_authentic": "FFT",
+    "sheng": "FFT",
+    "luo": "FFT",
+    "kikuyu": "FFT",
+    "kamba": "FFT",
+    "pooled": "FFT"
+  }
+}

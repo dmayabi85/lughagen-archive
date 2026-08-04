@@ -1,0 +1,77 @@
+{
+  "model_path": "McGill-NLP/AfriqueGemma-4B",
+  "tokenizer": "McGill-NLP/AfriqueGemma-4B",
+  "val_file": "/workspace/data/corpus/splits_v2/validation_shared_v3.jsonl",
+  "seq_len": 1024,
+  "per_device_batch": 4,
+  "dtype": "bf16",
+  "results": {
+    "swahili_authentic": {
+      "label": "swahili_authentic",
+      "eval_loss": 2.29838311849066,
+      "perplexity": 9.958068414390333,
+      "bpc": 1.0129178692927825,
+      "avg_chars_per_token": 3.2735782708863828,
+      "n_samples": 1476,
+      "n_tokens": 164940,
+      "n_chars": 539944,
+      "eval_runtime_s": 85.47522044181824
+    },
+    "kikuyu": {
+      "label": "kikuyu",
+      "eval_loss": 4.823539728104354,
+      "perplexity": 124.40467103392277,
+      "bpc": 3.23278317055756,
+      "avg_chars_per_token": 2.152602410407514,
+      "n_samples": 1500,
+      "n_tokens": 94009,
+      "n_chars": 202364,
+      "eval_runtime_s": 85.15709495544434
+    },
+    "luo": {
+      "label": "luo",
+      "eval_loss": 7.316877409854218,
+      "perplexity": 1505.4955767457704,
+      "bpc": 3.5716998689030848,
+      "avg_chars_per_token": 2.9554618645018054,
+      "n_samples": 1500,
+      "n_tokens": 44591,
+      "n_chars": 131787,
+      "eval_runtime_s": 84.85273265838623
+    },
+    "kamba": {
+      "label": "kamba",
+      "eval_loss": 5.269142424922183,
+      "perplexity": 194.24930763099124,
+      "bpc": 3.373671116219369,
+      "avg_chars_per_token": 2.253262213268623,
+      "n_samples": 1500,
+      "n_tokens": 87364,
+      "n_chars": 196854,
+      "eval_runtime_s": 85.43977642059326
+    },
+    "sheng": {
+      "label": "sheng",
+      "eval_loss": 5.482046644088076,
+      "perplexity": 240.33809089200938,
+      "bpc": 2.550325036325494,
+      "avg_chars_per_token": 3.101142558182708,
+      "n_samples": 1500,
+      "n_tokens": 59253,
+      "n_chars": 183752,
+      "eval_runtime_s": 84.81083488464355
+    },
+    "pooled": {
+      "label": "pooled",
+      "eval_loss": 4.142069912963088,
+      "perplexity": 62.932952456905106,
+      "bpc": 2.1811889493145897,
+      "avg_chars_per_token": 2.739672656202034,
+      "n_samples": 5976,
+      "n_tokens": 390904,
+      "n_chars": 1070949,
+      "eval_runtime_s": 340.92482447624207,
+      "note": "pooled = 4 monolingual languages (swahili_authentic, kikuyu, luo, kamba); Sheng excluded to match LughaGen convention"
+    }
+  }
+}
