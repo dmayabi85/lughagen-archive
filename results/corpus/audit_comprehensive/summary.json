@@ -1,0 +1,75 @@
+{
+  "input_file": "/workspace/data/corpus/splits_v2/pathD_v2_filtered/train.jsonl",
+  "total_records_in_file": 1380264,
+  "scanned_records": 1380264,
+  "sampling": "every 1th",
+  "sampling_coverage_pct": 100.0,
+  "empty_records": 0,
+  "parse_errors": 0,
+  "nonempty_scanned": 1380264,
+  "wall_clock_sec": 58.9,
+  "issue_counts_absolute": {
+    "very_short": 11849,
+    "long_char_repeat": 287,
+    "within_doc_repetition": 198,
+    "ocr_failure": 10,
+    "kenyan_phone": 10,
+    "email": 5,
+    "possible_kenyan_id": 1,
+    "mojibake": 3,
+    "high_symbol": 1
+  },
+  "issue_rates_pct": {
+    "very_short": 0.8585,
+    "long_char_repeat": 0.0208,
+    "within_doc_repetition": 0.0143,
+    "ocr_failure": 0.0007,
+    "kenyan_phone": 0.0007,
+    "email": 0.0004,
+    "possible_kenyan_id": 0.0001,
+    "mojibake": 0.0002,
+    "high_symbol": 0.0001
+  },
+  "estimated_full_corpus_counts": {
+    "very_short": 11849,
+    "long_char_repeat": 287,
+    "within_doc_repetition": 198,
+    "ocr_failure": 10,
+    "kenyan_phone": 10,
+    "email": 5,
+    "possible_kenyan_id": 1,
+    "mojibake": 3,
+    "high_symbol": 1
+  },
+  "per_language": {
+    "swahili": {
+      "very_short": 3324,
+      "long_char_repeat": 287,
+      "within_doc_repetition": 172,
+      "ocr_failure": 10,
+      "kenyan_phone": 6,
+      "email": 2,
+      "possible_kenyan_id": 1,
+      "mojibake": 1
+    },
+    "luo": {
+      "very_short": 7893,
+      "within_doc_repetition": 6
+    },
+    "kikuyu": {
+      "very_short": 318,
+      "within_doc_repetition": 4,
+      "kenyan_phone": 2,
+      "email": 2
+    },
+    "kamba": {
+      "very_short": 314,
+      "within_doc_repetition": 16,
+      "kenyan_phone": 2,
+      "mojibake": 2,
+      "email": 1,
+      "high_symbol": 1
+    }
+  },
+  "multi_issue_records_count": 7
+}

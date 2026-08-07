@@ -1,0 +1,39 @@
+{
+  "input_file": "/workspace/data/corpus/splits_v2/pathD_v2_filtered/validation_shared_v3.jsonl",
+  "total_records_in_file": 5976,
+  "scanned_records": 5976,
+  "sampling": "every 1th",
+  "sampling_coverage_pct": 100.0,
+  "empty_records": 0,
+  "parse_errors": 0,
+  "nonempty_scanned": 5976,
+  "wall_clock_sec": 0.2,
+  "issue_counts_absolute": {
+    "very_short": 43,
+    "within_doc_repetition": 1
+  },
+  "issue_rates_pct": {
+    "very_short": 0.7195,
+    "within_doc_repetition": 0.0167
+  },
+  "estimated_full_corpus_counts": {
+    "very_short": 43,
+    "within_doc_repetition": 1
+  },
+  "per_language": {
+    "kamba": {
+      "very_short": 4
+    },
+    "luo": {
+      "very_short": 31
+    },
+    "swahili": {
+      "very_short": 7,
+      "within_doc_repetition": 1
+    },
+    "kikuyu": {
+      "very_short": 1
+    }
+  },
+  "multi_issue_records_count": 0
+}
