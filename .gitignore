@@ -116,3 +116,7 @@ nohup.out
 .vscode/
 .pytest_cache/
 .mypy_cache/
+
+# Older audit variants (superseded by _comprehensive versions)
+results/corpus/audit/
+scripts/audit_corpus_quality.py
