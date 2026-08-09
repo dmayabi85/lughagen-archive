@@ -162,3 +162,23 @@ step-5000, 5200, 5400, 5600, 5800, 6000 for all Phase 3 seed variants.
 - Section 5.Y: Overfitting verification (train-eval gap analysis)
 - Chapter 6: Cross-baseline comparison (uses step-6000 numbers)
 - Section 8.X: Adaptive training length future work
+
+### 5.A.9.1 Tokenizer-Model Consistency Verification
+
+Post-preservation verification confirmed that the preserved tokenizer
+matches the model's embedding configuration:
+
+- Model embedding matrix: [8000, 4608] (from safetensors)
+- Model config vocab_size: 8000
+- Preserved tokenizer vocab_size: 8000
+
+All three sources agree: the Phase 3.5 Gemma-FFT model uses the 8k
+LughaGen custom tokenizer, applied via Amendment 8 embedding remap from
+Gemma 2 27B's native 256k vocabulary. This confirms:
+
+1. Amendment 8 (embedding remap) was correctly applied during training
+2. The preserved step-4000 checkpoint is fully self-consistent
+3. Aug 11 evaluation will produce methodologically valid results
+
+Tokenizer files copied from LughaGen-Gemma2-27B-CPT-S137 release
+(compatible 8k custom tokenizer used across all Phase 3.5 runs).
