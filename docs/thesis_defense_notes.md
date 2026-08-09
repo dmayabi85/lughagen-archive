@@ -221,3 +221,51 @@ seeing results.**
 Freeze the interpretation framework NOW (the questions in "Interpretation
 Protocol" section above). The story emerges from applying those questions
 to the measured numbers, not from matching numbers against pre-declared bands.
+
+## Frontier Model Extensions — Deferred to Future Work
+
+During thesis planning, extension to frontier MoE architectures (Llama 4
+Scout: 109B total / 17B active MoE; DeepSeek V4 Flash: 284B total / 13B
+active MoE) was considered and deferred based on the following analysis:
+
+### Infrastructure fit
+- 8×A100 80GB (640 GB total GPU memory) is sized appropriately for
+  Llama 3.1 8B and Gemma 2 27B dense architectures used in this thesis
+- Llama 4 Scout QLoRA requires either H100-class GPUs or heavy training
+  compromises (seq_len ≤512, per-device batch 1, gradient checkpointing)
+  that would produce a struggle-run rather than a representative
+  framework demonstration
+- DeepSeek V4 Flash (284B) exceeds any single-node A100 configuration
+  regardless of quantization
+
+### Methodological fit
+- LughaGen framework validates on continued pretraining and full
+  fine-tuning objectives with language modeling loss
+- Frontier MoE models are increasingly deployed as instruction-tuned
+  releases, which are trained with SFT objectives on
+  instruction-response pairs
+- Direct BPC comparison between LM-trained LughaGen models and
+  SFT-trained frontier models would require careful methodology
+  reframing beyond the scope of this thesis
+
+### Framework readiness
+The LughaGen framework (Chapter 4, Amendments 8-12) is designed
+model-family-agnostic. Extension to MoE architectures would require:
+
+1. Amendment 11-style attention implementation routing for MoE-specific
+   attention patterns (expert routing, expert-parallel attention)
+2. Registration of tokenizer for Llama 4 or DeepSeek V4 vocabularies
+3. Verification of Amendment 8 (embedding remap) applicability for
+   MoE embedding structures
+
+These extensions represent well-scoped follow-up research questions
+suitable for either a workshop paper or extended journal submission.
+
+### Native FLORES-200 comparison (post-thesis, easy addition)
+
+For contextualization against frontier models WITHOUT training, a
+future extension would evaluate Llama 4 Scout Instruct and DeepSeek V4
+Flash via API on the same FLORES-200 devtest sets used in Chapter 6.
+This would preserve methodological rigor (no training methodology
+mismatch) while providing frontier-model reference points for the
+LughaGen benchmark. Estimated effort: 4-6 hours.

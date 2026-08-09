@@ -94,3 +94,23 @@ Categorized by priority. Each has a plan, timeline, and success criterion.
 
 7. **Tokenizer confound**: Cross-tokenizer BPC is methodologically sound,
    but tokenizer efficiency itself is a variable we cannot isolate.
+
+## Update — Aug 8 Afternoon
+
+### Frontier Model Coverage Decision
+
+Item added and resolved: Llama 4 Scout QLoRA + DeepSeek V4 Flash QLoRA
+training was proposed to add frontier model coverage. After analysis of:
+
+- Infrastructure (8×A100 80GB vs H100 recommendations)
+- Methodology (LM-based BPC vs SFT-based instruction training mismatch)
+- Timeline (5-8 days consumption of critical writing window)
+- Better alternatives (already-strong Llama 3.1 8B specialization story;
+  Chapter 8 framework generalization discussion; post-thesis Instruct
+  API evaluation)
+
+**Decision**: Skip Llama 4 Scout and DeepSeek V4 training. Defer to
+post-thesis future work. Add framework extension discussion to Chapter 8.
+
+**Rationale documented**: `docs/thesis_defense_notes.md` (Frontier Model
+Extensions section)
