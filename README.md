@@ -2,6 +2,21 @@
 
 LughaGen is a collaborative project to develop and evaluate an LLM for low-resourced African languages, with an initial focus on **Swahili, Kikuyu, Luo, and Kamba**.
 
+
+## First time here? Read this first
+
+If you are:
+- **A layperson wanting to understand what this project does** → Continue reading this README
+- **A reviewer evaluating the thesis contribution** → See `REVIEW_GUIDE.md`
+- **A researcher wanting to reproduce results** → See `CANONICAL_SCRIPTS.md`
+- **Following the Aug 11-15 thesis submission workflow** → See `scripts/workflow/README.md`
+
+The repository contains 237 files from 6 months of research. Most are
+supporting infrastructure or earlier versions. **`CANONICAL_SCRIPTS.md`
+tells you which specific script produced each result** — this is the
+file to consult when the repository structure looks overwhelming.
+
+
 ## Overview
 
 The project is organized into four working areas:
