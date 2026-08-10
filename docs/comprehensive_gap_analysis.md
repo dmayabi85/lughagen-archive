@@ -556,3 +556,184 @@ methodological framework" — much stronger defense position.
 Not adding: Frontier models, Mistral/Qwen baselines, self-training,
 another tokenizer experiment, another training run. Scope discipline
 maintained.
+
+## Final Corrections and Scope Lock (Aug 9 Final)
+
+Third-round reviewer feedback confirmed the direction and applied four
+specific corrections. After these, the experimental scope is FROZEN.
+No further additions.
+
+### Correction 1: Drop "co-primary" terminology
+
+Previous language:
+"This thesis evaluates training strategies along two dimensions,
+treating both as primary outcomes rather than treating efficiency as
+secondary."
+
+Corrected language:
+"The study evaluates adaptation strategies across two primary
+dimensions: language-modeling quality, measured by validation BPC,
+and compute efficiency, measured by BPC achieved at equivalent
+GPU-hour budgets and by position on the BPC-vs-GPU-hour Pareto
+frontier."
+
+Rationale: "Co-primary" carries clinical-trials methodology baggage
+including multiplicity adjustment expectations. Simpler "two primary
+dimensions" achieves the same conceptual framing without inviting
+inappropriate statistical scrutiny.
+
+### Correction 2: Trim CI epistemic language
+
+Previous language:
+"The 95 percent CI excludes zero, indicating the observed difference
+is unlikely under a null of no effect at this sample size."
+
+Corrected language:
+"The 95 percent bootstrap confidence interval for the paired BPC
+difference excluded zero."
+
+Then separately interpret magnitude and direction.
+
+Rationale: Bootstrap CI construction does not formally support
+null-hypothesis language without additional inferential framework.
+Report what the interval shows; do not reach for null-hypothesis
+statements.
+
+### Correction 3: Effect size as EXPLICIT reporting standard
+
+Previous framing: "natural byproduct of paired bootstrap"
+
+Corrected framing: Explicit reporting requirement. For every major
+comparison, report ALL FOUR together:
+
+1. Absolute delta BPC (nats)
+2. Relative percentage improvement
+3. 95 percent bootstrap CI
+4. GPU-hours consumed
+
+Template sentence:
+"LughaGen-Llama-FFT reduced pooled BPC by 0.059 (4.7 percent relative
+improvement over Llama-CPT; 95 percent CI [-0.068, -0.050]) while
+requiring 134 GPU-hours."
+
+NOT acceptable in final draft:
+"FFT was better than CPT" (missing all four elements)
+"FFT is statistically better" (undefined stat framework)
+
+### Correction 4: Equal-GPU-hour uses ACTUAL hours, not step counts
+
+Previous approach: Compare BPC at step 2000, step 4000, step 6000
+across all models.
+
+Problem: Llama (batch 256, seq 1024) and Gemma (batch 128, seq 1024)
+have different throughput. Same step count corresponds to different
+actual GPU-hours consumed.
+
+Corrected approach: Interpolate to fixed GPU-hour points:
+- 50 GPU-hours: identify nearest step for each model, report BPC
+- 100 GPU-hours: same
+- 150 GPU-hours: same
+- 200 GPU-hours: same (only Gemma reaches this)
+
+This makes the equal-compute comparison methodologically sound.
+Especially important for Llama-8B vs Gemma-27B where per-step compute
+differs substantially.
+
+Implementation for Aug 12 aug12_step3_compute_efficiency.py:
+1. Load trajectory data (step, eval_loss) per model
+2. Load actual wall-clock timings per step interval
+3. Compute cumulative GPU-hours at each step
+4. For target compute budgets (50, 100, 150, 200 GPU-hrs), interpolate
+   eval_loss for each model
+5. Convert to BPC
+6. Report comparison table + Pareto plot
+
+## Scope Lock (Aug 9)
+
+The experimental scope is now FROZEN. Do not add:
+
+- Another foundation model
+- Another major training run
+- Self-improving training
+- Mistral/Qwen baselines
+- Another tokenizer experiment
+- Large hyperparameter sweep
+- Additional African languages
+- Additional adaptation methods
+
+Remaining work is ONLY:
+
+Execution (Aug 11-13):
+- Gemma-FFT eval + baseline BPC + bootstrap CIs + per-language table
+- Best-checkpoint eval (Llama-FFT + Llama-QLoRA + Llama-CPT closest)
+- Gemma-FFT step 4000 direct efficiency measurement
+- FLORES-200 setup + contamination check + evaluation
+- Equal-GPU-hour analysis + Pareto frontier
+
+Writing (Aug 14-18):
+- Chapter 1 introduction
+- Chapter 2 related work
+- Chapter 3 methodology (with new outcome framing)
+- Chapter 4 experimental design (controlled-factor analysis)
+- Chapter 5 method comparison (empirical analysis, with efficiency subsection)
+- Appendix 5.A best-checkpoint analysis
+- Chapter 6 baseline comparison (with FLORES, macro-BPC, Pareto)
+- Chapter 7 limitations (8 subsections)
+- Chapter 8 discussion + future work + adaptive training + frontier deferral
+- Executive summary + abstract
+- Final polish + submit Aug 18
+
+## Locked Thesis Story
+
+Research Question:
+Which adaptation strategy provides the best language-modeling quality,
+and which provides the best quality for a fixed amount of GPU compute,
+across low-resource African languages?
+
+Evidence chain:
+1. Language modeling quality (Chapters 5-6): pooled BPC + macro-BPC
+2. Compute efficiency (Chapter 6): BPC at GPU-hour budgets + Pareto
+3. Cross-language robustness (Chapter 5): per-language BPC
+4. External generalization (Chapter 6): FLORES-200 downstream
+
+Statistical support:
+- Paired bootstrap CIs on all primary comparisons
+- Seed variability quantified where n>1
+- Effect sizes reported with all comparisons
+- Contamination checks preregistered
+
+Causal discipline:
+- Chapter 4 factorial: causal statements permitted for varied factors
+- Chapters 5-6: empirical/descriptive statements only
+
+Limitations acknowledged:
+- Model-family scope (Llama + Gemma only)
+- Seed limitations (Gemma n=1)
+- Language imbalance (Swahili 57 percent of corpus)
+- Corpus scope (1.38M records)
+- Compute budget (8xA100 fixed)
+- Evaluation scope (BPC + FLORES only)
+- Downstream scope (FLORES translation only)
+- Framework scope (Llama/Gemma paradigm specific)
+
+Frontier work deferred with rationale:
+- Llama 4 Scout, DeepSeek V4 Flash
+- Cross-family baselines
+- Self-training experiments
+
+## What "Locked" Means Operationally
+
+If a new reviewer suggestion arrives before Aug 18:
+- Document it in future work section
+- Do NOT execute during thesis window
+- Do NOT add to experimental plan
+- Do NOT modify existing scripts
+
+The only exceptions:
+- Corrections to methodology errors (bugs in scripts, incorrect
+  formulas)
+- Corrections to factual errors (wrong numbers, wrong dates)
+- Requests from Dr. Nderu directly
+
+Reviewer aesthetic preferences or optional additions: catalog for
+future work, do not add.

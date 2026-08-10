@@ -50,3 +50,20 @@ Language corrections during writing:
 - "95 percent CI excludes zero" not "statistically significant"
 - Report absolute delta + relative percentage + CI + GPU-hours together
 - "Under our conditions" not causal attribution for cross-model comparisons
+
+
+## Scope Locked (Aug 9)
+
+The experimental scope is FROZEN. Execute the workflow as specified.
+Do not add new experiments or major analyses.
+
+Final framing corrections:
+- Use "two primary evaluation dimensions" not "co-primary outcomes"
+- Report "95 percent CI excluded zero" not "statistically significant"
+- Effect size reporting requires: absolute delta + relative percent + CI + GPU-hours
+- Equal-compute analysis uses actual GPU-hours not step counts
+
+Reviewer additions catalogued: 11 items total.
+Executed additions: 11 items (7 first round + 4 second round).
+Corrections applied: 4 (co-primary drop, CI language, effect size explicit, actual GPU-hours).
+Deferred to future work: frontier models, cross-family baselines, tokenizer ablations.
