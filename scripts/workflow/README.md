@@ -35,3 +35,18 @@ Aug 15:
 - docs/best_checkpoint_analysis_outline.md - Appendix 5.A structure
 - docs/chapter5_efficiency_outline.md - trajectory analysis
 - docs/thesis_defense_notes.md - defense framing
+
+
+## Late Reviewer Additions (Aug 9 second round)
+
+Framing and methodology improvements integrated:
+
+- Item 1: Co-primary outcomes framing (Chapter 3, Aug 15-16)
+- Item 4-fix: Preregistered contamination exclusion rule (aug12_step1)
+- Item 9: Controlled vs empirical evidence labels (Chapters 4/5/6)
+- Item 10: Primary/secondary outcome hierarchy (Chapter 3)
+
+Language corrections during writing:
+- "95 percent CI excludes zero" not "statistically significant"
+- Report absolute delta + relative percentage + CI + GPU-hours together
+- "Under our conditions" not causal attribution for cross-model comparisons

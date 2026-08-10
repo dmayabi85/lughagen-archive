@@ -338,3 +338,221 @@ Aug 11 workflow: extends Steps 5 and 6 (paired bootstrap + macro-BPC).
 Aug 12 workflow: adds FLORES contamination check, GPU-hour definition,
 equal-compute comparison.
 Aug 13-15: seed variability report and causal claim discipline sweep.
+
+## Final Reviewer Additions (Aug 9 Late Session)
+
+Second-round reviewer feedback added 4 more items after triage:
+- Item 1: Co-primary outcomes framing
+- Item 4-fix: Preregister FLORES contamination exclusion (not threshold-based)
+- Item 9: Structural distinction between controlled and empirical evidence
+- Item 10: Primary/secondary outcome hierarchy in Chapter 3
+
+Plus two language corrections applied during writing (Aug 15 causal claim sweep).
+
+### Item 1: Co-Primary Outcomes Framing (Chapter 3)
+
+Priority: Critical (framing shift, not new analysis)
+When: Aug 15-16 during Chapter 3 writing
+Effort: 30 minutes
+
+Problem: Thesis currently reads as "we measure BPC across configurations,
+and separately look at efficiency." This positions efficiency as
+secondary. Reviewer suggests both are primary.
+
+Solution: Chapter 3 methodology introduction should explicitly frame
+two primary outcomes:
+
+    This thesis evaluates training strategies along two dimensions:
+    language modeling quality (measured by pooled validation BPC) and
+    compute efficiency (measured by BPC achieved at fixed GPU-hour
+    budgets and by position on the BPC-vs-GPU-hour Pareto frontier).
+    Both dimensions are treated as primary outcomes.
+
+Language note: Do NOT use the term "co-primary" without qualification.
+In clinical trials methodology, co-primary has specific statistical
+meaning (Bonferroni-adjusted alpha for two endpoints). Describe the
+concept rather than borrow the specific term. Alternative: "twin
+primary outcomes" or "dual primary evaluation dimensions."
+
+Impact on thesis structure:
+- Chapter 3 methodology gains explicit outcome framing
+- Chapter 6 Pareto frontier becomes a headline figure, not a side chart
+- Chapter 8 conclusions can address both dimensions independently
+- Examiner accepts equal-compute analysis as central rather than
+  supplementary
+
+### Item 4-fix: Preregister FLORES Contamination Exclusion
+
+Priority: Critical methodology fix
+When: Aug 12 (integrate into aug12_step1_flores_setup.sh)
+Effort: 15 minutes
+
+Problem: Previous plan said "if >5 percent overlap, exclude" — arbitrary
+threshold that could be gamed by looking at overlap magnitude before
+deciding.
+
+Solution: Preregister exclusion rule BEFORE examining overlap:
+
+    Contamination Exclusion Rule (preregistered Aug 12):
+    - Any FLORES sentence with EXACT string match (after normalization:
+      lowercase, strip punctuation, collapse whitespace) in any training
+      corpus record: EXCLUDE from evaluation
+    - Any FLORES sentence with 8-gram overlap (>=8 consecutive tokens
+      matching training corpus): FLAG for reporting but NOT exclude
+    - Rule established before running eval; results reported regardless
+      of magnitude
+
+Report structure in Chapter 6:
+    "FLORES-200 devtest sentences were checked against the LughaGen
+    training corpus using exact-match and 8-gram overlap. N sentences
+    (X.X percent) exhibited exact matches and were excluded from
+    evaluation per preregistered rule. Y sentences (Y.Y percent)
+    exhibited 8-gram overlap without exact match and were included
+    with flag for interpretation."
+
+If overlap turns out to be 0 percent (expected): still report the
+methodology.
+
+### Item 9: Controlled vs Empirical Evidence Distinction
+
+Priority: Critical for defense-defensibility
+When: Aug 14-15 (Chapter 4/5/6 section labels + Chapter 3 framing)
+Effort: 15 minutes
+
+Problem: Cross-model comparisons vary multiple factors simultaneously.
+Attributing observed differences to any single factor is not causal.
+But some evidence IS causal (factorial main effects). Reader/examiner
+needs to distinguish types of evidence.
+
+Solution: Structural labels in thesis chapters:
+
+    Chapter 4: Controlled-Factor Analysis
+    (2^4 factorial: LR schedule, batch, sequence, optimizer)
+    → Causal statements permitted for factors experimentally varied
+
+    Chapter 5: Method Comparison (Empirical Analysis)
+    (LughaGen adaptations across CPT/FFT/QLoRA)
+    → Empirical/descriptive statements only, no causal attribution
+
+    Chapter 6: Baseline Comparison (Empirical Analysis)
+    (LughaGen vs external baselines)
+    → Empirical comparison, no causal claims about model architecture
+
+Chapter 3 framing sentence:
+
+    "This thesis uses two types of evidence: controlled-factor analysis
+    (Chapter 4, where individual factors are experimentally isolated)
+    and empirical comparative analysis (Chapters 5-6, where cross-
+    configuration differences reflect multiple simultaneous factor
+    changes). Causal claims are limited to controlled-factor analysis."
+
+This protects against defense questions of form:
+    "Did you isolate the effect of model scale vs tokenizer vs
+    hyperparameters?"
+Answer: "No — Chapter 5-6 present empirical comparisons; Chapter 4
+provides the causal factor-level evidence."
+
+### Item 10: Primary/Secondary Outcome Hierarchy
+
+Priority: High (structural clarity)
+When: Aug 15-16 during Chapter 3 writing
+Effort: 30 minutes
+
+Problem: Without explicit outcome hierarchy, reader/examiner may see
+thesis as "testing 12 metrics and reporting whichever look best."
+
+Solution: Explicit hierarchy in Chapter 3:
+
+    Primary Outcomes (twin evaluation dimensions):
+    1. Language modeling quality: pooled validation BPC
+    2. Compute efficiency: BPC at fixed GPU-hour budgets +
+       BPC-vs-GPU-hour Pareto frontier
+
+    Secondary Outcomes:
+    3. Cross-language equity: macro-BPC (equal weighting across
+       5 languages)
+    4. External generalization: FLORES-200 downstream metrics
+       (chrF++, BLEU)
+
+    Supporting Evidence:
+    - Paired bootstrap CIs (statistical uncertainty on differences)
+    - Seed variability quantification (configuration robustness)
+    - Training trajectory analysis (learning dynamics)
+    - Saturation analysis (compute allocation)
+    - Contamination checks (evaluation validity)
+
+Value: Preempts "you tested many things and selected favorable ones"
+critique. Locks in what counts as headline result before writing it up.
+
+### Language Corrections (Aug 15 Causal Claim Review)
+
+Priority: Included in existing Gap 35 script
+When: Aug 15
+Effort: 30 minutes to standardize
+
+Corrections to enforce:
+
+Statistical language:
+- Use: "95 percent bootstrap CI excludes zero"
+- Not: "statistically significant" (implies formal hypothesis test)
+- Not: "p<0.05" (no p-values were computed)
+
+Effect claims:
+- Report absolute delta AND relative percentage AND CI together:
+  "FFT reduced pooled BPC by 0.059 nats (4.7 percent relative
+  improvement over CPT; 95 percent bootstrap CI [-0.068, -0.050])"
+- Connect to compute:
+  "achieved with X GPU-hours"
+
+Ranking language:
+- Use: "achieved lowest BPC in tested configurations"
+- Not: "best model" (implies universal claim beyond conditions)
+
+Attribution language:
+- Use: "under our conditions" or "in the tested configurations"
+- Not: "X causes Y" for cross-model comparisons
+
+## Updated Priority Order for Aug 11-18
+
+Combined view (Gap number + item priority):
+
+Aug 11 execution day:
+- Gap 25: Paired bootstrap CIs (Step 5b, 1h)
+- Gap 29: Macro-BPC alongside micro-pooled (Step 6 extension, 30min)
+
+Aug 12:
+- Gap 28 + Item 4-fix: FLORES contamination check with preregistered rule (Step 1 substep, 1-2h)
+- Gap 32: Equal-compute comparison analysis (Step 3, 1h)
+- Gap 31: Formal GPU-hour accounting (Chapter 6 methodology, 30min)
+
+Aug 13:
+- Gap 27: Seed variability quantified (Chapter 5, 30min)
+- Chapter 3 writing (methodology framing includes Items 1, 9, 10)
+
+Aug 14:
+- Chapter 4 writing (factorial with "controlled analysis" framing)
+- Chapter 5 writing (empirical comparison framing)
+
+Aug 15:
+- Gap 35: Causal claim discipline sweep (script already committed)
+- Language corrections applied
+- Chapter 7 limitations section
+
+Aug 16-18:
+- Chapter 6, 7, 8 writing
+- Chapter 1 introduction
+- Executive summary
+- Final polish
+- Submit
+
+## Summary of Late Reviewer Additions
+
+Net additional effort: ~90 minutes of framing and methodology work
+during Aug 11-15.
+
+Value: Transforms thesis from "empirical study" to "controlled
+methodological framework" — much stronger defense position.
+
+Not adding: Frontier models, Mistral/Qwen baselines, self-training,
+another tokenizer experiment, another training run. Scope discipline
+maintained.
